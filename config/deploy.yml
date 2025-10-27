@@ -1,0 +1,40 @@
+service: btar
+image: deploy/btar
+
+servers:
+  web:
+    - 37.59.100.208
+
+ssh:
+  user: deploy
+
+proxy:
+  ssl: false
+  host: 37.59.100.208
+  app_port: 80
+
+registry:
+  username: eidj
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+env:
+  clear:
+    RAILS_ENV: production
+    DB_HOST: 172.17.0.1    # Postgres sur l'hôte (bridge docker)
+  secret:
+    - RAILS_MASTER_KEY
+    - BTAR_DATABASE_PASSWORD
+
+volumes:
+  - "storage:/rails/storage"
+
+aliases:
+  console: app exec --interactive --reuse "bin/rails console"
+  shell: app exec --interactive --reuse "bash"
+  logs: app logs -f
+  dbc: app exec --interactive --reuse "bin/rails dbconsole"
+  migrate: app exec --reuse "bin/rails db:migrate"
+
+builder:
+  arch: amd64
