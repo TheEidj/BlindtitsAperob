@@ -84,6 +84,8 @@ production:
     database: btar_production
     username: btar
     password: <%= ENV["BTAR_DATABASE_PASSWORD"] %>
+    host: <%= ENV.fetch("DB_HOST", "localhost") %>
+    port: 5432
   cache:
     <<: *primary_production
     database: btar_production_cache
