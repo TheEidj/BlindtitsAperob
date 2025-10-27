@@ -1,5 +1,5 @@
 service: btar
-image: deploy/btar
+image: eidj/btar
 
 servers:
   web:
