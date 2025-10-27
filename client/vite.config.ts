@@ -13,6 +13,7 @@ export default defineConfig({
             '@': fileURLToPath(new URL('./src', import.meta.url))
         }
     },
+    base: '/app/',
     build: {
         outDir: 'dist',
         emptyOutDir: true,
@@ -20,10 +21,12 @@ export default defineConfig({
     server: {
         port: 5173,
         proxy: {
-            '/api': {
-                target: 'http://localhost:3000',
-                changeOrigin: true
-            }
+            '/login': 'http://localhost:3000',
+            '/me': 'http://localhost:3000',
+            '/playlists': 'http://localhost:3000',
+            '/teams': 'http://localhost:3000',
+            '/game_sessions': 'http://localhost:3000',
+            '/tracks': 'http://localhost:3000',
         }
     }
 })
