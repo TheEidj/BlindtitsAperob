@@ -19,11 +19,17 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
+  # Root redirect to Vue.js app
+  root to: redirect("/app/")
+
   # Defines the root path route ("/")
   # root "posts#index"
 
   # Serve Vue.js app for all non-API routes
+  # Cette route doit être EN DERNIER
   get "*path", to: "application#fallback_index_html", constraints: ->(request) do
-    !request.xhr? && request.format.html?
+    !request.xhr? &&
+      request.format.html? &&
+      !request.path.start_with?("/me", "/login", "/teams", "/game_sessions", "/tracks", "/playlists", "/up")
   end
 end

@@ -16,6 +16,6 @@ class ApplicationController < ActionController::API
   end
 
   def fallback_index_html
-    render file: Rails.public_path.join("app", "index.html")
+    render file: Rails.public_path.join("app", "index.html"), layout: false, content_type: "text/html"
   end
 end
