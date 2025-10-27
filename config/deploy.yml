@@ -35,7 +35,7 @@ registry:
 env:
   clear:
     RAILS_ENV: production
-    DB_HOST: 37.59.100.208   # Postgres sur l'hôte (bridge docker)
+    DB_HOST: btar-db
   secret:
     - RAILS_MASTER_KEY
     - BTAR_DATABASE_PASSWORD
