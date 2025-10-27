@@ -15,7 +15,7 @@ accessories:
         POSTGRES_USER: btar
         POSTGRES_DB: btar_production
       secret:
-        - BTAR_DATABASE_PASSWORD
+        - POSTGRES_PASSWORD
     directories:
       - data:/var/lib/postgresql/data
 
