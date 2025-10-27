@@ -5,6 +5,20 @@ servers:
   web:
     - 37.59.100.208
 
+accessories:
+  db:
+    image: postgres:16
+    host: 37.59.100.208
+    port: 5432
+    env:
+      clear:
+        POSTGRES_USER: btar
+        POSTGRES_DB: btar_production
+      secret:
+        - BTAR_DATABASE_PASSWORD
+    directories:
+      - data:/var/lib/postgresql/data
+
 ssh:
   user: deploy
 
@@ -21,7 +35,7 @@ registry:
 env:
   clear:
     RAILS_ENV: production
-    DB_HOST: 172.17.0.1    # Postgres sur l'hôte (bridge docker)
+    DB_HOST: btar-db   # Postgres sur l'hôte (bridge docker)
   secret:
     - RAILS_MASTER_KEY
     - BTAR_DATABASE_PASSWORD
