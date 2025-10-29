@@ -1,6 +1,6 @@
 module Public
   class TeamsController < ApplicationController
-    skip_before_action :authenticate_user!, only: [ :create ]
+    skip_before_action :authorize_request, only: [ :create ]
 
     def create
       game_session = GameSession.find(params[:game_session_id])

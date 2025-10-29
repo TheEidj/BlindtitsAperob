@@ -1,7 +1,7 @@
 
 module Public
   class GameSessionsController < ApplicationController
-    skip_before_action :authenticate_user!, only: [ :upcoming, :past ]
+    skip_before_action :authorize_request, only: [ :upcoming, :past ]
 
     def upcoming
       game_session = GameSession.upcoming.includes(teams: []).first
