@@ -1,6 +1,10 @@
 class ApplicationController < ActionController::API
   before_action :authorize_request
 
+  def fallback_index_html
+    render file: Rails.public_path.join("index.html"), layout: false
+  end
+
   private
 
   def authorize_request
@@ -17,9 +21,5 @@ class ApplicationController < ActionController::API
 
   def current_user
     @current_user
-  end
-
-  def fallback_index_html
-    render file: Rails.public_path.join("index.html"), layout: false
   end
 end

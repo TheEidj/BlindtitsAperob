@@ -32,11 +32,10 @@ Rails.application.routes.draw do
     post "teams", to: "teams#create"
   end
 
-  # Root redirect to Vue.js app
-  root to: redirect("/")
-
-  # Serve Vue.js app for all other HTML requests
+  # Catch-all pour Vue.js (doit être EN DERNIER)
   get "*path", to: "application#fallback_index_html", constraints: ->(request) do
-    request.format.html?
+    !request.xhr? && request.format.html?
   end
+
+  root to: "application#fallback_index_html"
 end
