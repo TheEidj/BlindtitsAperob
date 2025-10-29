@@ -33,7 +33,7 @@ Rails.application.routes.draw do
   end
 
   # Root redirect to Vue.js app
-  root to: redirect("/")
+  root to: redirect("/app/")
 
   # Serve Vue.js app for all other HTML requests
   get "*path", to: "application#fallback_index_html", constraints: ->(request) do
