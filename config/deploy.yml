@@ -3,7 +3,22 @@ image: eidj/btar
 
 servers:
   web:
-    - 37.59.100.208
+    hosts:
+      - 37.59.100.208
+    labels:
+      traefik.http.routers.btar.rule: Host(`blindtits-aperob.ovh`)
+      traefik.http.routers.btar.entrypoints: websecure
+      traefik.http.routers.btar.tls.certresolver: letsencrypt
+
+proxy:
+  ssl: true
+  host: blindtits-aperob.ovh
+  app_port: 3000
+
+registry:
+  username: eidj
+  password:
+    - KAMAL_REGISTRY_PASSWORD
 
 accessories:
   db:
@@ -21,16 +36,6 @@ accessories:
 
 ssh:
   user: deploy
-
-proxy:
-  ssl: false
-  host: 37.59.100.208
-  app_port: 80
-
-registry:
-  username: eidj
-  password:
-    - KAMAL_REGISTRY_PASSWORD
 
 env:
   clear:

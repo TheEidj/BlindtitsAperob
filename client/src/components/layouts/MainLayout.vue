@@ -1,5 +1,16 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+import {useAuthStore} from "../../stores/auth.ts";
 import BottomNav from '../organisms/BottomNav.vue';
+import VisitorNav from "../organisms/VisitorNav.vue";
+
+const route = useRoute();
+const authStore = useAuthStore();
+
+const showAdminNav = computed(() => {
+  return authStore.isAuthenticated && route.meta.requiresAuth;
+});
 </script>
 
 <template>
@@ -8,6 +19,7 @@ import BottomNav from '../organisms/BottomNav.vue';
     <main class="container mx-auto">
       <slot />
     </main>
-    <BottomNav />
+    <BottomNav v-if="showAdminNav"/>
+    <VisitorNav v-else/>
   </div>
 </template>

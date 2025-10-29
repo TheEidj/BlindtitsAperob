@@ -19,14 +19,27 @@ export default defineConfig({
         emptyOutDir: true,
     },
     server: {
-        port: 5173,
         proxy: {
-            '/login': 'http://localhost:3000',
-            '/me': 'http://localhost:3000',
-            '/playlists': 'http://localhost:3000',
-            '/teams': 'http://localhost:3000',
-            '/game_sessions': 'http://localhost:3000',
-            '/tracks': 'http://localhost:3000',
-        }
-    }
+            '/api': {
+                target: 'http://localhost:3000',
+                changeOrigin: true,
+            },
+            '/auth': {
+                target: 'http://localhost:3000',
+                changeOrigin: true,
+            },
+            '/playlists': {
+                target: 'http://localhost:3000',
+                changeOrigin: true,
+            },
+            '/game_sessions': {
+                target: 'http://localhost:3000',
+                changeOrigin: true,
+            },
+            '/public': {
+                target: 'http://localhost:3000',
+                changeOrigin: true,
+            },
+        },
+    },
 })

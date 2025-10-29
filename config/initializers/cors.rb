@@ -16,11 +16,17 @@
 # end
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins "http://37.59.100.208", "http://localhost:5173"
+    origins "http://37.59.100.208",
+            "http://localhost:5173",
+            "https://blindtits-aperob.ovh",
+            "http://blindtits-aperob.ovh",
+            "https://www.blindtits-aperob.ovh",
+            "http://www.blindtits-aperob.ovh",
+            "http://localhost:5173"
 
     resource "*",
              headers: :any,
              methods: %i[get post put patch delete options head],
-             credentials: false
+             credentials: true
   end
 end

@@ -2,69 +2,84 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import {useAuthStore} from "../stores/auth.ts";
+import { ArrowLeftIcon } from '@heroicons/vue/24/outline';
 
 const router = useRouter();
 const authStore = useAuthStore();
 
-const email = ref<string>("");
-const password = ref<string>("");
+const email = ref('');
+const password = ref('');
 const error = ref('');
+const isLoading = ref(false);
 
 const handleLogin = async () => {
   error.value = '';
+  isLoading.value = true;
 
   try {
     await authStore.login(email.value, password.value);
-    router.push('/playlists');
+    await router.push('/playlists');
   } catch (err: any) {
     error.value = err.response?.data?.error || 'Login failed';
-    console.error('Login error:', err);
+  } finally {
+    isLoading.value = false;
   }
+};
+
+const goBack = () => {
+  router.push('/');
 };
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-slate-900">
-    <div class="bg-gray-800 p-8 w-80 rounded-lg shadow-lg min-w-[50vw]">
-      <h1 class="text-3xl font-bold mb-6 text-center">BTAR Login</h1>
+  <div class="min-h-screen bg-gradient-to-br from-gray-900 via-indigo-900 to-purple-900 flex items-center justify-center p-6">
+    <div class="w-full max-w-md">
+      <button
+          @click="goBack"
+          class="mb-6 p-2 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors"
+      >
+        <ArrowLeftIcon class="h-6 w-6 text-white" />
+      </button>
 
-      <form @submit.prevent="handleLogin" class="space-y-4">
-        <div>
-          <label for="email" class="block text-sm font-medium mb-2">Email</label>
-          <input
-              id="email"
-              v-model="email"
-              type="email"
-              required
-              class="w-full px-4 py-2 bg-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-              placeholder="user@example.com"
-          />
-        </div>
+      <div class="bg-gray-800 rounded-2xl p-8 shadow-2xl">
+        <h1 class="text-3xl font-bold text-white mb-8 text-center">Admin Login</h1>
 
-        <div>
-          <label for="password" class="block text-sm font-medium mb-2">Password</label>
-          <input
-              id="password"
-              v-model="password"
-              type="password"
-              required
-              class="w-full px-4 py-2 bg-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-              placeholder="••••••••"
-          />
-        </div>
+        <form @submit.prevent="handleLogin" class="space-y-6">
+          <div>
+            <label class="block text-white font-medium mb-2">Email</label>
+            <input
+                v-model="email"
+                type="email"
+                required
+                class="w-full px-4 py-3 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                placeholder="Enter your email"
+            />
+          </div>
 
-        <div v-if="error" class="text-red-500 text-sm">
-          {{ error }}
-        </div>
+          <div>
+            <label class="block text-white font-medium mb-2">Password</label>
+            <input
+                v-model="password"
+                type="password"
+                required
+                class="w-full px-4 py-3 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                placeholder="Enter your password"
+            />
+          </div>
 
-        <button
-            type="submit"
-            :disabled="authStore.isLoading"
-            class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {{ authStore.isLoading ? 'Logging in...' : 'Login' }}
-        </button>
-      </form>
+          <div v-if="error" class="bg-red-500/20 border border-red-500 text-red-400 px-4 py-3 rounded-lg">
+            {{ error }}
+          </div>
+
+          <button
+              type="submit"
+              :disabled="isLoading"
+              class="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            {{ isLoading ? 'Logging in...' : 'Login' }}
+          </button>
+        </form>
+      </div>
     </div>
   </div>
 </template>

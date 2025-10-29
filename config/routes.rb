@@ -4,7 +4,15 @@ Rails.application.routes.draw do
     get "/me", to: "users#me"
     post "/login", to: "auth#login"
     resources :teams
-    resources :game_sessions
+    resources :game_sessions do
+      member do
+        post "add_playlist"
+        delete "remove_playlist/:playlist_id", action: :remove_playlist
+        post "add_team"
+        delete "remove_team/:team_id", action: :remove_team
+        patch "reorder_playlists"
+      end
+    end
     resources :tracks
     resources :playlists do
       collection do
@@ -15,6 +23,13 @@ Rails.application.routes.draw do
         get :oembed
       end
     end
+  end
+
+  # Public routes (no auth required)
+  namespace :public do
+    get "game_sessions/upcoming", to: "game_sessions#upcoming"
+    get "game_sessions/past", to: "game_sessions#past"
+    post "teams", to: "teams#create"
   end
 
   # Root redirect to Vue.js app

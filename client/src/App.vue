@@ -19,14 +19,14 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-900 text-gray-100">
+  <div class="min--h-screen bg-gray-900 text-gray-100">
     <transition name="fade">
       <div v-if="isBootstrapping" class="flex items-center justify-center h-screen">
         <div class="text-center animate-pulse">
           <h1 class="text-2xl font-bold">Chargement...</h1>
         </div>
       </div>
-      <div v-else class="container mx-auto py-8">
+      <div v-else class="container mx-auto">
         <MainLayout v-if="shouldShowLayout">
           <RouterView />
         </MainLayout>
