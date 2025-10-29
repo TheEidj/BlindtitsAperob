@@ -62,7 +62,7 @@ router.beforeEach((to, _from, next): void => {
     }
 
     if (to.path === "/login" && authStore.isAuthenticated) {
-        return next("/playlists");
+        return next("/");
     }
 
     next();

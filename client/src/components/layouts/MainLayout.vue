@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
-import {useAuthStore} from "../../stores/auth.ts";
+import { useAuthStore } from "../../stores/auth";
 import BottomNav from '../organisms/BottomNav.vue';
 import VisitorNav from "../organisms/VisitorNav.vue";
 
@@ -9,7 +9,7 @@ const route = useRoute();
 const authStore = useAuthStore();
 
 const showAdminNav = computed(() => {
-  return authStore.isAuthenticated && route.meta.requiresAuth;
+  return authStore.isAuthenticated;
 });
 </script>
 
