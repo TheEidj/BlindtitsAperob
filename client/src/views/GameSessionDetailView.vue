@@ -4,7 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 import type { GameSession } from '../types/gameSession';
 import { fetchGameSessionDetail } from '../services/gameSessionService';
 import { ArrowLeftIcon, UserGroupIcon, MusicalNoteIcon } from '@heroicons/vue/24/outline';
-import { animate } from 'animejs';
+import { animate, stagger } from 'animejs';
 
 const route = useRoute();
 const router = useRouter();
@@ -17,11 +17,11 @@ const loadGameSession = async () => {
     const id = Number(route.params.id);
     gameSession.value = await fetchGameSessionDetail(id);
 
-    animate({
-      targets: '.detail-section',
+    animate('.detail-section',
+    {
       opacity: [0, 1],
       translateY: [20, 0],
-      delay: anime.stagger(150),
+      delay: stagger(150),
       duration: 600,
       easing: 'easeOutCubic'
     });
@@ -106,12 +106,6 @@ onMounted(loadGameSession);
                 :key="playlist.id"
                 class="bg-gray-700 rounded-lg p-4 flex items-center gap-4"
             >
-              <img
-                  v-if="playlist.picture_url"
-                  :src="playlist.picture_url"
-                  :alt="playlist.name"
-                  class="w-16 h-16 rounded-lg object-cover"
-              />
               <span class="text-white font-medium">{{ playlist.name }}</span>
             </div>
           </div>

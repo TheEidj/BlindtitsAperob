@@ -4,7 +4,6 @@ import {ref, onMounted, nextTick} from 'vue';
 import type { GameSession } from '../types/gameSession';
 import { fetchUpcomingGameSession, registerTeam } from '../services/gameSessionService';
 import UpcomingGameSessionCard from '../components/molecules/UpcomingGameSessionCard.vue';
-import VisitorNav from '../components/organisms/VisitorNav.vue';
 import { useRouter } from 'vue-router';
 import { animate } from 'animejs';
 
@@ -23,9 +22,7 @@ const loadUpcomingSession = async () => {
           '.upcoming-card',
           {
             opacity: [0, 1],
-            translateY: [-50, 0]
-          },
-          {
+            translateY: [-50, 0],
             duration: 1000,
             easing: 'ease-out-cubic'
           }
@@ -55,9 +52,7 @@ const navigateToOldSessions = () => {
       '.landing-container',
       {
         opacity: [1, 0],
-        translateX: [0, -100]
-      },
-      {
+        translateX: [0, -100],
         duration: 400,
         easing: 'ease-in-cubic',
         complete: () => {
@@ -74,9 +69,7 @@ onMounted(() => {
       '.hero-title',
       {
         opacity: [0, 1],
-        translateY: [-30, 0]
-      },
-      {
+        translateY: [-30, 0],
         duration: 800,
         delay: 200,
         easing: 'ease-out-cubic'

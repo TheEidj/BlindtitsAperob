@@ -11,9 +11,7 @@ const handleMouseEnter = (platform: string) => {
       `.${platform}-icon`,
       {
         scale: [1, 1.2],
-        rotate: ['0deg', '360deg']
-      },
-      {
+        rotate: ['0deg', '360deg'],
         duration: 500,
         easing: 'ease-out-elastic'
       }
@@ -25,9 +23,7 @@ const handleMouseLeave = (platform: string) => {
   animate(
       `.${platform}-icon`,
       {
-        scale: [1.2, 1]
-      },
-      {
+        scale: [1.2, 1],
         duration: 300,
         easing: 'ease-out-quad'
       }

@@ -44,9 +44,7 @@ const openCreateModal = () => {
       '.create-modal',
       {
         opacity: [0, 1],
-        scale: [0.9, 1]
-      },
-      {
+        scale: [0.9, 1],
         duration: 400,
         easing: 'ease-out-cubic'
       }
@@ -73,9 +71,7 @@ onMounted(() => {
       '.add-button',
       {
         scale: [0, 1],
-        rotate: ['180deg', '0deg']
-      },
-      {
+        rotate: ['180deg', '0deg'],
         duration: 800,
         delay: 500,
         easing: 'ease-out-elastic'

@@ -21,7 +21,7 @@ import {
   PlusIcon,
   PencilIcon
 } from '@heroicons/vue/24/outline';
-import { animate } from 'animejs';
+import { animate, stagger } from 'animejs';
 
 const route = useRoute();
 const router = useRouter();
@@ -40,14 +40,16 @@ const loadGameSession = async () => {
     gameSession.value = await fetchGameSessionDetail(id);
     availablePlaylists.value = await fetchPlaylists();
 
-    animate({
-      targets: '.admin-section',
-      opacity: [0, 1],
-      translateY: [20, 0],
-      delay: anime.stagger(100),
-      duration: 600,
-      easing: 'easeOutCubic'
-    });
+    animate(
+      '.admin-section',
+      {
+        opacity: [0, 1],
+        translateY: [20, 0],
+        delay: stagger(100),
+        duration: 600,
+        easing: 'easeOutCubic'
+      }
+    );
   } catch (error) {
     console.error('Error loading game session:', error);
   } finally {
@@ -101,7 +103,9 @@ const handleDrop = async (targetPlaylistId: number) => {
 
   const reordered = [...playlists];
   const [removed] = reordered.splice(draggedIndex, 1);
-  reordered.splice(targetIndex, 0, removed);
+  if (removed){
+    reordered.splice(targetIndex, 0, removed);
+  }
 
   try {
     gameSession.value = await reorderPlaylists(
@@ -137,7 +141,7 @@ const handleDeleteSession = async () => {
 
   try {
     await deleteGameSession(gameSession.value.id);
-    router.push('/game-sessions');
+    await router.push('/game-sessions');
   } catch (error) {
     console.error('Error deleting session:', error);
   }
@@ -259,12 +263,6 @@ onMounted(loadGameSession);
                 class="bg-gray-700 rounded-lg p-4 flex items-center gap-4 group cursor-move hover:bg-gray-650"
             >
               <span class="text-gray-400 text-2xl">⋮⋮</span>
-              <img
-                  v-if="playlist.picture_url"
-                  :src="playlist.picture_url"
-                  :alt="playlist.name"
-                  class="w-16 h-16 rounded-lg object-cover"
-              />
               <span class="text-white font-medium flex-1">{{ playlist.name }}</span>
               <button
                   @click="handleRemovePlaylist(playlist.id)"
@@ -298,12 +296,6 @@ onMounted(loadGameSession);
               @click="handleAddPlaylist(playlist.id)"
               class="bg-gray-700 rounded-lg p-4 flex items-center gap-4 cursor-pointer hover:bg-gray-600 transition-colors"
           >
-            <img
-                v-if="playlist.picture_url"
-                :src="playlist.picture_url"
-                :alt="playlist.name"
-                class="w-12 h-12 rounded-lg object-cover"
-            />
             <span class="text-white">{{ playlist.name }}</span>
           </div>
         </div>

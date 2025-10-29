@@ -4,7 +4,7 @@ import type { GameSession } from '../../types/gameSession';
 import { CalendarIcon, UserGroupIcon } from '@heroicons/vue/24/outline';
 import { animate } from 'animejs';
 
-const props = defineProps<{
+defineProps<{
   gameSession: GameSession;
 }>();
 
@@ -37,9 +37,7 @@ const handleRegisterClick = () => {
       '.registration-form',
       {
         opacity: [0, 1],
-        translateY: [20, 0]
-      },
-      {
+        translateY: [20, 0],
         duration: 600,
         easing: 'ease-out-cubic'
       }
@@ -60,9 +58,7 @@ const handleSubmit = async () => {
         '.success-message',
         {
           scale: [0.8, 1],
-          opacity: [0, 1]
-        },
-        {
+          opacity: [0, 1],
           duration: 800,
           easing: 'ease-out-elastic'
         }
