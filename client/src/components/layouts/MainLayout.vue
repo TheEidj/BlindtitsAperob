@@ -1,23 +1,20 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useAuthStore } from "../../stores/auth";
-import BottomNav from '../organisms/BottomNav.vue';
+import AdminNav from '../organisms/AdminNav.vue';
 import VisitorNav from "../organisms/VisitorNav.vue";
 
 const authStore = useAuthStore();
 
-const showAdminNav = computed(() => {
+const isAdmin = computed(() => {
   return authStore.isAuthenticated;
 });
 </script>
 
 <template>
-  <div class="min-h-screen bg-slate-900 text-white pb-20">
-    <!-- pb-20 pour laisser l'espace pour la bottom nav -->
-    <main class="container mx-auto">
-      <slot />
-    </main>
-    <BottomNav v-if="showAdminNav"/>
+  <div class="pt-10 pb-30 px-4 bg-gradient min-h-screen">
+    <slot />
+    <AdminNav v-if="isAdmin"/>
     <VisitorNav v-else/>
   </div>
 </template>

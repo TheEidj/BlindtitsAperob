@@ -15,15 +15,16 @@ class PlaylistRefresher
 
     playlists.each do |p|
       pl = Playlist.find_or_initialize_by(deezer_id: p["id"])
-      pl.assign_attributes(
+      attrs = {
         name: p["title"].sub(/^BA\s*-\s*/i, "").strip,
         url: p["link"],
         nbTrack: p["nb_tracks"],
-        played: false,
         collaborative: p["collaborative"],
         creator: p.dig("creator", "id").to_s,
         deezer_id: p["id"].to_s
-      )
+      }
+      attrs["played"] = false if pl.new_record?
+      pl.assign_attributes(attrs)
       pl.save!
 
       # TODO: use p["tracklist"] to create tracks in db

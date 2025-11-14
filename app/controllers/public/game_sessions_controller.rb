@@ -1,52 +1,45 @@
 
 module Public
   class GameSessionsController < ApplicationController
-    skip_before_action :authorize_request, only: [ :upcoming, :past ]
+    skip_before_action :authorize_request, only: [ :featured, :upcoming, :ongoing, :archived ]
 
-    def upcoming
-      game_session = GameSession.upcoming.includes(teams: []).first
+    def featured
+      game_session = GameSession.ongoing.or(GameSession.upcoming).order(date: :asc).first
 
       if game_session
-        render json: serialize_game_session(game_session), status: :ok
+        render json: game_session, serializer: GameSessionSerializer, status: :ok
+      else
+        render json: { message: "No ongoing or upcoming game sessions" }, status: :ok
+      end
+    end
+    def upcoming
+      game_sessions = GameSession.upcoming.order(date: :asc).first
+
+      if game_sessions
+        render json: game_sessions, each_serializer: GameSessionSerializer, status: :ok
       else
         render json: { message: "No upcoming game sessions" }, status: :ok
       end
     end
 
-    def past
-      game_sessions = GameSession.past.includes(teams: [], playlists: [])
-      render json: game_sessions.map { |gs| serialize_game_session(gs) }, status: :ok
+    def ongoing
+      game_session = GameSession.ongoing.order(date: :asc).first
+
+      if game_session
+        render json: game_session, serializer: GameSessionSerializer, status: :ok
+      else
+        render json: { message: "No ongoing game sessions" }, status: :ok
+      end
     end
 
-    private
+    def archived
+      game_sessions = GameSession.archived
 
-    def serialize_game_session(game_session)
-      {
-        id: game_session.id,
-        date: game_session.date,
-        teams: game_session.teams.map { |t| serialize_team(t) },
-        playlists: game_session.playlists.map { |p| serialize_playlist(p) },
-        created_at: game_session.created_at,
-        updated_at: game_session.updated_at
-      }
-    end
-
-    def serialize_team(team)
-      {
-        id: team.id,
-        name: team.name,
-        color: team.color,
-        player_count: team.player_count || 0
-      }
-    end
-
-    def serialize_playlist(playlist)
-      {
-        id: playlist.id,
-        name: playlist.name,
-        deezer_id: playlist.deezer_id,
-        picture_url: playlist.picture_url
-      }
+      if game_sessions
+        render json: game_sessions, each_serializer: GameSessionSerializer, status: :ok
+      else
+        render json: { message: "No archived game sessions" }, status: :ok
+      end
     end
   end
 end

@@ -6,14 +6,19 @@ Rails.application.routes.draw do
     resources :teams
     resources :game_sessions do
       member do
-        post "add_playlist"
+        post :add_playlist
         delete "remove_playlist/:playlist_id", action: :remove_playlist
-        post "add_team"
+        patch :reorder_playlists
+        post :add_interlude
+        delete "remove_interlude/:interlude_id", action: :remove_interlude
+        patch :reorder_interludes
+        post :add_team
         delete "remove_team/:team_id", action: :remove_team
         patch "reorder_playlists"
       end
     end
     resources :tracks
+    resources :interludes
     resources :playlists do
       collection do
         post :refresh_all
@@ -25,10 +30,18 @@ Rails.application.routes.draw do
     end
   end
 
+  scope :game do
+    post ":id/start", to: "game#start"
+    post ":id/end", to: "game#end"
+    post ":id/:team_id/score", to: "game#update_score"
+  end
+
   # Public routes (no auth required)
   namespace :public do
+    get "game_sessions/ongoing", to: "game_sessions#ongoing"
     get "game_sessions/upcoming", to: "game_sessions#upcoming"
-    get "game_sessions/past", to: "game_sessions#past"
+    get "game_sessions/archived", to: "game_sessions#archived"
+    get "game_sessions/featured", to: "game_sessions#featured"
     post "teams", to: "teams#create"
   end
 

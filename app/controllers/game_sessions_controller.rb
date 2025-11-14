@@ -2,19 +2,19 @@ class GameSessionsController < ApplicationController
   before_action :set_game_session, only: [ :show, :update, :destroy, :add_playlist, :remove_playlist, :add_team, :remove_team, :reorder_playlists ]
 
   def index
-    game_sessions = GameSession.all.includes(teams: [], playlists: []).order(date: :desc)
-    render json: game_sessions.map { |gs| serialize_game_session(gs) }
+    game_sessions = GameSession.all.includes(teams: [], playlists: []).order(date: :asc)
+    render json: game_sessions, each_serializer: GameSessionSerializer, scope: @current_user
   end
 
   def show
-    render json: serialize_game_session_detail(@game_session)
+    render json: @game_session, serializer: GameSessionDetailSerializer, scope: @current_user
   end
 
   def create
     game_session = GameSession.new(game_session_params)
 
     if game_session.save
-      render json: serialize_game_session(game_session), status: :created
+      render json: game_session, serializer: GameSessionSerializer, scope: @current_user, status: :created
     else
       render json: { errors: game_session.errors.full_messages }, status: :unprocessable_entity
     end
@@ -22,7 +22,7 @@ class GameSessionsController < ApplicationController
 
   def update
     if @game_session.update(game_session_params)
-      render json: serialize_game_session(@game_session)
+      render json: @game_session, serializer: GameSessionSerializer, scope: @current_user
     else
       render json: { errors: @game_session.errors.full_messages }, status: :unprocessable_entity
     end
@@ -36,34 +36,67 @@ class GameSessionsController < ApplicationController
   def add_playlist
     playlist = Playlist.find(params[:playlist_id])
     @game_session.playlists << playlist unless @game_session.playlists.include?(playlist)
-    render json: serialize_game_session_detail(@game_session)
+    render json: @game_session, serializer: GameSessionDetailSerializer, scope: @current_user
   end
 
   def remove_playlist
     playlist = Playlist.find(params[:playlist_id])
     @game_session.playlists.delete(playlist)
-    render json: serialize_game_session_detail(@game_session)
+    render json: @game_session, serializer: GameSessionDetailSerializer, scope: @current_user
+  end
+
+  def add_interlude
+    @game_session = GameSession.find(params[:id])
+    interlude = Interlude.find(params[:interlude_id])
+
+    @game_session.interludes << interlude unless @game_session.interludes.include?(interlude)
+
+    render json: @game_session, serializer: GameSessionDetailSerializer
+  end
+
+  def remove_interlude
+    @game_session = GameSession.find(params[:id])
+    interlude = Interlude.find(params[:interlude_id])
+
+    @game_session.interludes.delete(interlude)
+
+    render json: @game_session, serializer: GameSessionDetailSerializer
   end
 
   def add_team
     team = Team.find(params[:team_id])
     @game_session.teams << team unless @game_session.teams.include?(team)
-    render json: serialize_game_session_detail(@game_session)
+    render json: @game_session, serializer: GameSessionDetailSerializer, scope: @current_user
   end
 
   def remove_team
     team = Team.find(params[:team_id])
     @game_session.teams.delete(team)
-    render json: serialize_game_session_detail(@game_session)
+    render json: @game_session, serializer: GameSessionDetailSerializer, scope: @current_user
   end
 
   def reorder_playlists
+    @game_session = GameSession.find(params[:id])
     playlist_ids = params[:playlist_ids]
+
     playlist_ids.each_with_index do |playlist_id, index|
-      GameSessionPlaylist.find_by(game_session: @game_session, playlist_id: playlist_id)
-        &.update(position: index)
+      game_session_playlist = @game_session.game_session_playlists.find_by(playlist_id: playlist_id)
+      game_session_playlist&.update(position: index)
     end
-    render json: serialize_game_session_detail(@game_session)
+
+    render json: @game_session, serializer: GameSessionDetailSerializer
+  end
+
+  def reorder_interludes
+    @game_session = GameSession.find(params[:id])
+    interlude_ids = params[:interlude_ids]
+
+    interlude_ids.each_with_index do |interlude_id, index|
+      game_session_interlude = @game_session.game_session_interludes.find_by(interlude_id: interlude_id)
+      game_session_interlude&.update(position: index)
+    end
+
+    render json: @game_session, serializer: GameSessionDetailSerializer
   end
 
   private
@@ -73,48 +106,6 @@ class GameSessionsController < ApplicationController
   end
 
   def game_session_params
-    params.require(:game_session).permit(:date)
-  end
-
-  def serialize_game_session(game_session)
-    {
-      id: game_session.id,
-      date: game_session.date,
-      teams_count: game_session.teams.count,
-      playlists_count: game_session.playlists.count,
-      upcoming: game_session.upcoming?,
-      created_at: game_session.created_at
-    }
-  end
-
-  def serialize_game_session_detail(game_session)
-    {
-      id: game_session.id,
-      date: game_session.date,
-      teams: game_session.teams.map { |t| serialize_team(t) },
-      playlists: game_session.playlists.map { |p| serialize_playlist(p) },
-      upcoming: game_session.upcoming?,
-      created_at: game_session.created_at,
-      updated_at: game_session.updated_at
-    }
-  end
-
-  def serialize_team(team)
-    {
-      id: team.id,
-      name: team.name,
-      color: team.color,
-      player_count: team.player_count || 0
-    }
-  end
-
-  def serialize_playlist(playlist)
-    {
-      id: playlist.id,
-      name: playlist.name,
-      deezer_id: playlist.deezer_id,
-      picture_url: playlist.picture_url,
-      played: playlist.played
-    }
+    params.require(:game_session).permit(:date, :status, :number)
   end
 end

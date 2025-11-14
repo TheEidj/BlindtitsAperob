@@ -1,16 +1,19 @@
 class GameSession < ApplicationRecord
-  has_many :game_session_playlists, dependent: :destroy
+  has_many :game_session_playlists, -> { order(position: :asc) }, dependent: :destroy
   has_many :playlists, through: :game_session_playlists
+
+  has_many :game_session_interludes, -> { order(position: :asc) }, dependent: :destroy
+  has_many :interludes, through: :game_session_interludes
 
   has_many :game_session_teams, dependent: :destroy
   has_many :teams, through: :game_session_teams
 
   has_many :scores, dependent: :destroy
 
-  scope :upcoming, -> { where("date >= ?", Time.current).order(date: :asc) }
-  scope :past, -> { where("date < ?", Time.current).order(date: :desc) }
-
-  def upcoming?
-    date && date >= Time.current
-  end
+  enum :status, {
+    upcoming: "upcoming",
+    ongoing: "ongoing",
+    archived: "archived",
+    cancelled: "cancelled"
+  }, validate: true
 end

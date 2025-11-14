@@ -22,9 +22,9 @@ const navigate = () => {
   <button
       @click="navigate"
       class="flex flex-col items-center gap-1 flex-1 py-2 transition-colors"
-      :class="isActive ? 'text-indigo-400' : 'text-gray-400 hover:text-gray-300'"
+      :class="isActive ? 'text-purple-800' : 'text-gray-600 hover:text-gray-700'"
   >
-    <component :is="icon" class="h-6 w-6" />
-    <span class="text-xs font-medium">{{ label }}</span>
+    <component :is="icon" class="h-8 w-8" />
+    <span class="text-2xs font-medium">{{ label }}</span>
   </button>
 </template>

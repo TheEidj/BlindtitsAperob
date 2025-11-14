@@ -8,21 +8,41 @@ const props = defineProps<{
   gameSessions: GameSession[];
 }>();
 
-const upcomingSessions = computed(() =>
-    props.gameSessions.filter(gs => gs.upcoming)
+const ongoingSession = computed(() =>
+    props.gameSessions.filter(gs => gs.status === 'ongoing')
 );
 
-const pastSessions = computed(() =>
-    props.gameSessions.filter(gs => !gs.upcoming)
+const upcomingSessions = computed(() =>
+    props.gameSessions.filter(gs => gs.status === 'upcoming')
+);
+
+const archivedSessions = computed(() =>
+    props.gameSessions.filter(gs => gs.status === 'archived')
 );
 </script>
 
 <template>
   <div class="space-y-6">
     <CollapsibleSection
+        title="Ongoing"
+        :count="ongoingSession.length"
+        :defaultOpen="true"
+    >
+      <GameSessionCard
+          v-for="gameSession in ongoingSession"
+          :key="gameSession.id"
+          :game-session="gameSession"
+      />
+
+      <div v-if="ongoingSession.length === 0" class="text-center py-8 text-gray-500">
+        No ongoing game session
+      </div>
+    </CollapsibleSection>
+
+    <CollapsibleSection
         title="Upcoming"
         :count="upcomingSessions.length"
-        :defaultOpen="true"
+        :defaultOpen="false"
     >
       <GameSessionCard
           v-for="gameSession in upcomingSessions"
@@ -36,18 +56,18 @@ const pastSessions = computed(() =>
     </CollapsibleSection>
 
     <CollapsibleSection
-        title="Past"
-        :count="pastSessions.length"
+        title="Archived"
+        :count="archivedSessions.length"
         :defaultOpen="false"
     >
       <GameSessionCard
-          v-for="gameSession in pastSessions"
+          v-for="gameSession in archivedSessions"
           :key="gameSession.id"
           :game-session="gameSession"
       />
 
-      <div v-if="pastSessions.length === 0" class="text-center py-8 text-gray-500">
-        No past game sessions yet
+      <div v-if="archivedSessions.length === 0" class="text-center py-8 text-gray-500">
+        No archived game sessions yet
       </div>
     </CollapsibleSection>
   </div>

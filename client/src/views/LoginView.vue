@@ -32,7 +32,7 @@ const goBack = () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-gray-900 via-indigo-900 to-purple-900 flex items-center justify-center p-6">
+  <div class="h-screen flex items-center justify-center p-6">
     <div class="w-full max-w-md">
       <button
           @click="goBack"

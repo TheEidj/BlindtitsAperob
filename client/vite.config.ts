@@ -24,22 +24,6 @@ export default defineConfig({
                 target: 'http://localhost:3000',
                 changeOrigin: true,
             },
-            '/auth': {
-                target: 'http://localhost:3000',
-                changeOrigin: true,
-            },
-            '/playlists': {
-                target: 'http://localhost:3000',
-                changeOrigin: true,
-            },
-            '/game_sessions': {
-                target: 'http://localhost:3000',
-                changeOrigin: true,
-            },
-            '/public': {
-                target: 'http://localhost:3000',
-                changeOrigin: true,
-            },
         },
     },
 })

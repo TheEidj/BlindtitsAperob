@@ -2,13 +2,13 @@
 import { ref } from 'vue';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/outline';
 
-defineProps<{
+const props = defineProps<{
   title: string;
   count: number;
   defaultOpen?: boolean;
 }>();
 
-const isOpen = ref(true);
+const isOpen = ref(( props.defaultOpen && props.count != 0 ) || false);
 
 const toggle = () => {
   isOpen.value = !isOpen.value;
@@ -30,12 +30,8 @@ const toggle = () => {
       <ChevronDownIcon v-else class="h-5 w-5 text-gray-400" />
     </button>
     
-    <div v-show="isOpen" class="p-4 space-y-3 bg-gray-900">
+    <div v-show="isOpen" class="p-4 space-y-3 bg-gradient">
       <slot />
     </div>
   </div>
 </template>
-
-<style scoped>
-
-</style>
