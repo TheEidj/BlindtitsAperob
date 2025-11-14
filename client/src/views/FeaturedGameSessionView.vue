@@ -50,9 +50,10 @@ const handleRegisterClick = async() => {
 const handleStartClick = async () => {
   // TODO : Normalize game sessions counters to 0 in gameSessionService
   if (!gameSession.value ||
-      (gameSession.value.playlists_count ?? 0) > 0
-  ) return;
-
+      (gameSession.value.playlists_count ?? 0) === 0
+  ) {
+    return;
+  }
   try {
     await gameStore.startGame(gameSession.value.id);
 

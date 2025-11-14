@@ -30,7 +30,7 @@ const toggle = () => {
       <ChevronDownIcon v-else class="h-5 w-5 text-gray-400" />
     </button>
     
-    <div v-show="isOpen" class="p-4 space-y-3 bg-gradient">
+    <div v-show="isOpen" class="p-4 space-y-3 bg-white/40">
       <slot />
     </div>
   </div>
