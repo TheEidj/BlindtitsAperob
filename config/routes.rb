@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
-  defaults format: :json do
+
+  scope :api, defaults: { format: :json } do
     get "/me", to: "users#me"
     post "/login", to: "auth#login"
+
     resources :teams
     resources :game_sessions do
       member do
@@ -28,21 +30,20 @@ Rails.application.routes.draw do
         get :oembed
       end
     end
-  end
 
-  scope :game do
-    post ":id/start", to: "game#start"
-    post ":id/end", to: "game#end"
-    post ":id/:team_id/score", to: "game#update_score"
-  end
+    scope :game do
+      post ":id/start", to: "game#start"
+      post ":id/end", to: "game#end"
+      post ":id/:team_id/score", to: "game#update_score"
+    end
 
-  # Public routes (no auth required)
-  namespace :public do
-    get "game_sessions/ongoing", to: "game_sessions#ongoing"
-    get "game_sessions/upcoming", to: "game_sessions#upcoming"
-    get "game_sessions/archived", to: "game_sessions#archived"
-    get "game_sessions/featured", to: "game_sessions#featured"
-    post "teams", to: "teams#create"
+    namespace :public do
+      get "game_sessions/ongoing", to: "game_sessions#ongoing"
+      get "game_sessions/upcoming", to: "game_sessions#upcoming"
+      get "game_sessions/archived", to: "game_sessions#archived"
+      get "game_sessions/featured", to: "game_sessions#featured"
+      post "teams", to: "teams#create"
+    end
   end
 
   # Catch-all pour Vue.js (doit être EN DERNIER)
