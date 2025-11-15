@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::API
-  protect_from_forgery with: :exception
   before_action :authorize_request
   skip_before_action :authorize_request, only: [ :fallback_index_html ]
   def fallback_index_html
