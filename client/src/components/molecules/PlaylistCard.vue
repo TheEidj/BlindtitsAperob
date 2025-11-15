@@ -14,10 +14,10 @@ const { cardRef, onClick } = useSwipeNavigate(`/playlists/${props.playlist.id}`)
   <div
       ref="cardRef"
       @click="onClick"
-      class="card bg-gray-800 border border-gray-700 rounded-lg p-4 hover:border-indigo-500 transition-colors cursor-pointer select-none touch-none"
+      class="card bg-gray-800 border border-gray-700 rounded-lg p-4 hover:border-indigo-500 transition-colors cursor-pointer"
   >
     <div class="flex items-center justify-between">
-      <div class="flex-1 pointer-events-none">
+      <div class="flex-1">
         <div class="text-lg font-semibold">{{ playlist.name }}</div>
         <div class="flex items-center gap-3 mt-1">
           <PlaylistBadge
@@ -30,7 +30,7 @@ const { cardRef, onClick } = useSwipeNavigate(`/playlists/${props.playlist.id}`)
       </div>
       
       <!-- Indicateur visuel -->
-      <div class="text-indigo-400 text-2xl opacity-60 pointer-events-none">
+      <div class="text-indigo-400 text-2xl opacity-60">
         →
       </div>
     </div>

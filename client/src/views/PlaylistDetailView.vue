@@ -62,7 +62,6 @@ onMounted(loadPlaylist);
 </script>
 
 <template>
-  <div class="max-w-3xl mx-auto p-6">
     <button
         @click="goBack"
         class="mb-6 flex items-center gap-2 text-gray-400 hover:text-white transition"
@@ -114,5 +113,4 @@ onMounted(loadPlaylist);
         <div v-html="embedHtml"></div>
       </div>
     </div>
-  </div>
 </template>
