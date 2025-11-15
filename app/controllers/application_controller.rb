@@ -1,9 +1,5 @@
 class ApplicationController < ActionController::API
   before_action :authorize_request
-  skip_before_action :authorize_request, only: [ :fallback_index_html ]
-  def fallback_index_html
-    render file: Rails.public_path.join("index.html"), layout: false, content_type: "text/html"
-  end
 
   private
 

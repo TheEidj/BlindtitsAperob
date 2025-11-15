@@ -46,10 +46,10 @@ Rails.application.routes.draw do
     end
   end
 
-  # Catch-all pour Vue.js (doit être EN DERNIER)
-  get "*path", to: "application#fallback_index_html", constraints: ->(request) do
+  # Catch-all pour Vue.js
+  get "*path", to: "spa#index", constraints: ->(request) do
     !request.xhr? && request.format.html?
   end
 
-  root to: "application#fallback_index_html"
+  root to: "spa#index"
 end
