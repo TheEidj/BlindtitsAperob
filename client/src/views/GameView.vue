@@ -63,7 +63,7 @@ function animateScore(teamId: number) {
   const selector = `.score-${teamId}`
   animate(selector, {
     scale: [1, 1.15, 1],
-    duration: 350,
+    duration: 100,
     easing: 'easeOutBack',
   })
 }
