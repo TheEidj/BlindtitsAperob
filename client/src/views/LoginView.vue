@@ -46,10 +46,10 @@ const goBack = () => {
 
         <form @submit.prevent="handleLogin" class="space-y-6">
           <div>
-            <label class="block text-white font-medium mb-2">Email</label>
+            <label class="block text-white font-medium mb-2">UserName</label>
             <input
                 v-model="email"
-                type="email"
+                type="text"
                 required
                 class="w-full px-4 py-3 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 placeholder="Enter your email"
