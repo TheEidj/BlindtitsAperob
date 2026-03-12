@@ -17,3 +17,8 @@ User.find_or_create_by!(email: "titouan.andritsos@gmail.com") do |u|
   u.role = "admin"
   u.deezer_id = "2937737684"
 end
+User.find_or_create_by!(email: "andie") do |u|
+  u.password = "555666"
+  u.role = "admin"
+  u.deezer_id = "6784840983"
+end
