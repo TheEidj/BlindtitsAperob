@@ -1,6 +1,6 @@
 class PlaylistsController < ApplicationController
   skip_before_action :authorize_request, only: [ :oembed ]
-  before_action :set_playlist, only: %i[ show update destroy toggle_played ]
+  before_action :set_playlist, only: %i[ show update destroy toggle_played archive ]
 
   # GET /playlists
   def index
@@ -44,6 +44,12 @@ class PlaylistsController < ApplicationController
   # PATCH /playlists/:id/toggle_played
   def toggle_played
     @playlist.update!(played: !@playlist.played)
+    render json: @playlist, serializer: PlaylistSerializer, scope: @current_user
+  end
+
+  # PATCH /playlists/:id/archive
+  def archive
+    @playlist.update!(played: true)
     render json: @playlist, serializer: PlaylistSerializer, scope: @current_user
   end
 

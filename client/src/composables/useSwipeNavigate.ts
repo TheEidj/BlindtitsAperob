@@ -94,7 +94,7 @@ export function useSwipeNavigate(url: string, onArchive?: () => void | Promise<v
         if (currentX > SWIPE_THRESHOLD) {
             // swipe right => navigate
             currentAnimation = animate(el, {
-                translateX: ['', window.innerWidth + 'px'],
+                translateX: `${window.innerWidth}px`,
                 opacity: 0,
                 duration: 300,
                 complete: () => {
@@ -105,18 +105,18 @@ export function useSwipeNavigate(url: string, onArchive?: () => void | Promise<v
         } else if (currentX < -SWIPE_THRESHOLD) {
             // swipe left => archive
             currentAnimation = animate(el, {
-                translateX: ['', -window.innerWidth + 'px'],
+                translateX: `${-window.innerWidth}px`,
                 opacity: 0,
                 duration: 300,
-                complete: async () => {
+                complete: () => {
                     currentAnimation = null
-                    await archive()
+                    archive()
                 },
             })
         } else {
             // reset
             currentAnimation = animate(el, {
-                x: 0,
+                translateX: '0px',
                 opacity: 1,
                 duration: 400,
                 ease: spring({ bounce: 0.6, stiffness: 300, damping: 25 }),

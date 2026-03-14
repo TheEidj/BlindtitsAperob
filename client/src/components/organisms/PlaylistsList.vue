@@ -8,13 +8,21 @@ const props = defineProps<{
   playlists: Playlist[];
 }>();
 
-const notPlayedPlaylists = computed(() => 
+const emit = defineEmits<{
+  archived: [id: number]
+}>();
+
+const notPlayedPlaylists = computed(() =>
   props.playlists.filter(p => !p.played)
 );
 
-const playedPlaylists = computed(() => 
+const playedPlaylists = computed(() =>
   props.playlists.filter(p => p.played)
 );
+
+const handleArchived = (id: number) => {
+  emit('archived', id);
+};
 </script>
 
 <template>
@@ -28,6 +36,7 @@ const playedPlaylists = computed(() =>
           v-for="playlist in notPlayedPlaylists"
           :key="playlist.id"
           :playlist="playlist"
+          @archived="handleArchived"
       />
       
       <div v-if="notPlayedPlaylists.length === 0" class="text-center py-8 text-gray-500">

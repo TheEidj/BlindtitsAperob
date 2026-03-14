@@ -31,6 +31,11 @@ const handleRefresh = async () => {
   }
 };
 
+const handleArchived = async (id: number) => {
+  // Recharger les playlists après archivage
+  await loadPlaylists();
+};
+
 onMounted(loadPlaylists);
 </script>
 
@@ -57,5 +62,6 @@ onMounted(loadPlaylists);
   <PlaylistsList
       v-else
       :playlists="playlists"
+      @archived="handleArchived"
   />
 </template>
