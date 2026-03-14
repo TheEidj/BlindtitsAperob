@@ -3,7 +3,7 @@ import type { Playlist } from "../../types/playlist";
 import PlaylistBadge from "../atoms/PlaylistBadge.vue";
 import {useSwipeNavigate} from "../../composables/useSwipeNavigate.ts";
 import {archivePlaylist} from "../../services/playlistService.ts";
-import {computed, ref, watch} from "vue";
+import {computed, ref} from "vue";
 
 const props = defineProps<{
   playlist: Playlist;
@@ -18,7 +18,7 @@ const handleArchive = async () => {
   emit('archived', props.playlist.id);
 };
 
-const { cardRef, onClick, getSwipeDirection, currentX } = useSwipeNavigate(`/playlists/${props.playlist.id}`, handleArchive);
+const { cardRef, onClick, getSwipeDirection } = useSwipeNavigate(`/playlists/${props.playlist.id}`, handleArchive);
 
 const swipeDirection = ref<'left' | 'right' | null>(null);
 
