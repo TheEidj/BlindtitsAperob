@@ -7,21 +7,14 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
-User.find_or_create_by!(email: "stugiiz17@gmail.com") do |u|
-  u.password = "mascot17"
-  u.role = "admin"
-  u.deezer_id = "2224765"
-  u.user_name = "Rob"
-end
-User.find_or_create_by!(email: "titouan.andritsos@gmail.com") do |u|
-  u.password = "555666"
-  u.role = "admin"
-  u.deezer_id = "2937737684"
-  u.user_name = "Tits"
-end
-User.find_or_create_by!(email: "andie") do |u|
-  u.password = "555666"
-  u.role = "admin"
-  u.deezer_id = "6784840983"
-  u.user_name = "Andie"
-end
+user = User.find_or_initialize_by(email: "stugiiz17@gmail.com")
+user.assign_attributes(password: "mascot17", role: "admin", deezer_id: "2224765", user_name: "Rob")
+user.save!
+
+user = User.find_or_initialize_by(email: "titouan.andritsos@gmail.com")
+user.assign_attributes(password: "555666", role: "admin", deezer_id: "2937737684", user_name: "Tits")
+user.save!
+
+user = User.find_or_initialize_by(email: "andie")
+user.assign_attributes(password: "555666", role: "admin", deezer_id: "6784840983", user_name: "Andie")
+user.save!
