@@ -8,6 +8,8 @@ import { ArrowPathIcon } from "@heroicons/vue/24/outline"
 const playlists = ref<Playlist[]>([]);
 const isLoading = ref(false);
 const isRefreshing = ref(false);
+const toastMessage = ref<string | null>(null);
+const toastTimeout = ref<number | null>(null);
 
 const loadPlaylists = async () => {
   isLoading.value = true;
@@ -31,7 +33,21 @@ const handleRefresh = async () => {
   }
 };
 
+const showToast = (message: string) => {
+  if (toastTimeout.value) {
+    clearTimeout(toastTimeout.value);
+  }
+  toastMessage.value = message;
+  toastTimeout.value = window.setTimeout(() => {
+    toastMessage.value = null;
+  }, 3000);
+};
+
 const handleArchived = async (id: number) => {
+  const playlist = playlists.value.find(p => p.id === id);
+  if (playlist) {
+    showToast(`${playlist.name} marked as done`);
+  }
   // Recharger les playlists après archivage
   await loadPlaylists();
 };
@@ -64,4 +80,23 @@ onMounted(loadPlaylists);
       :playlists="playlists"
       @archived="handleArchived"
   />
+
+  <!-- Toast notification -->
+  <Transition
+      enter-active-class="transition ease-out duration-300"
+      enter-from-class="translate-y-2 opacity-0"
+      enter-to-class="translate-y-0 opacity-100"
+      leave-active-class="transition ease-in duration-200"
+      leave-from-class="translate-y-0 opacity-100"
+      leave-to-class="translate-y-2 opacity-0"
+  >
+    <div
+        v-if="toastMessage"
+        class="fixed bottom-30 w-full flex justify-center text-center z-50"
+    >
+      <div class="bg-green-600 text-white px-10 py-3 rounded-lg shadow-lg">
+        {{ toastMessage }}
+      </div>
+    </div>
+  </Transition>
 </template>

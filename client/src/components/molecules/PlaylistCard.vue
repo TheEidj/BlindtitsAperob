@@ -18,7 +18,11 @@ const handleArchive = async () => {
   emit('archived', props.playlist.id);
 };
 
-const { cardRef, onClick, getSwipeDirection } = useSwipeNavigate(`/playlists/${props.playlist.id}`, handleArchive);
+// Ne permettre le swipe que si la playlist n'est pas déjà jouée
+const { cardRef, onClick, getSwipeDirection } = useSwipeNavigate(
+  `/playlists/${props.playlist.id}`,
+  props.playlist.played ? undefined : handleArchive
+);
 
 const swipeDirection = ref<'left' | 'right' | null>(null);
 
@@ -65,7 +69,7 @@ const borderClass = computed(() => {
         <div v-else-if="swipeDirection === 'right'" class="text-green-400 text-2xl">
           👁️
         </div>
-        <div v-else-if="swipeDirection === 'left'" class="text-red-400 text-2xl">
+        <div v-else-if="swipeDirection === 'left' && !playlist.played" class="text-red-400 text-2xl">
           🗄️
         </div>
       </div>
