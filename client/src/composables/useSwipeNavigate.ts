@@ -3,7 +3,7 @@ import { ref, onMounted, onUnmounted } from "vue";
 import { animate, spring } from "animejs";
 import {useRouter} from "vue-router";
 
-export function useSwipeNavigate(url: string) {
+export function useSwipeNavigate(url: string, onArchive?: () => void | Promise<void>) {
     const router = useRouter();
     const cardRef = ref<HTMLDivElement | null>(null);
 
@@ -17,6 +17,9 @@ export function useSwipeNavigate(url: string) {
     const INTENT_THRESHOLD = 10
 
     const go = () => void router.push(url);
+    const archive = async () => {
+        if (onArchive) await onArchive();
+    };
 
     const resetTransform = (el: HTMLDivElement) => {
         el.style.transform = ''
@@ -99,6 +102,17 @@ export function useSwipeNavigate(url: string) {
                     go()
                 },
             })
+        } else if (currentX < -SWIPE_THRESHOLD) {
+            // swipe left => archive
+            currentAnimation = animate(el, {
+                translateX: ['', -window.innerWidth + 'px'],
+                opacity: 0,
+                duration: 300,
+                complete: async () => {
+                    currentAnimation = null
+                    await archive()
+                },
+            })
         } else {
             // reset
             currentAnimation = animate(el, {
@@ -175,5 +189,12 @@ export function useSwipeNavigate(url: string) {
         document.removeEventListener('mouseup', mouseUpHandler)
     })
 
-    return { cardRef, onClick }
+    const getSwipeDirection = () => {
+        if (!isSwiping) return null
+        if (currentX > INTENT_THRESHOLD) return 'right'
+        if (currentX < -INTENT_THRESHOLD) return 'left'
+        return null
+    }
+
+    return { cardRef, onClick, getSwipeDirection, currentX: () => currentX }
 }

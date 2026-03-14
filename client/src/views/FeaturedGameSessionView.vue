@@ -10,6 +10,7 @@ import {formatDate} from "../utils/formatDate.ts";
 import {useAuthStore} from "../stores/auth.ts";
 import router from "../router";
 import {useGameStore} from "../stores/gameStore.ts";
+import api from "../services/api.ts";
 
 const gameStore = useGameStore();
 const showForm = ref(false);
@@ -67,7 +68,22 @@ const handleEndClick = async () => {
   if (!gameSession.value) return;
 
   try {
+    // Récupérer les playlists et interludes du jeu en cours avant de terminer
+    const currentGame = gameStore.currentGame;
+
     await gameStore.endGame();
+
+    // Marquer les playlists et interludes comme played/done
+    if (currentGame) {
+      const playlistIds = currentGame.playlists.map(p => p.id);
+      const interludeIds = currentGame.interludes.map(i => i.id);
+
+      // Appeler les endpoints pour marquer comme played/done
+      await Promise.all([
+        ...playlistIds.map(id => api.patch(`/playlists/${id}/mark_played`)),
+        ...interludeIds.map(id => api.patch(`/interludes/${id}/mark_done`))
+      ]);
+    }
 
     gameSession.value = await fetchFeaturedGameSession();
   } catch (error) {

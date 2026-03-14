@@ -25,3 +25,7 @@ export async function fetchPlaylistOembed(playlistId: number): Promise<{ html: s
     const res = await api.get<{ html: string }>(`/playlists/${playlistId}/oembed`);
     return res.data;
 }
+
+export async function archivePlaylist(playlistId: number): Promise<void> {
+    await api.patch(`/playlists/${playlistId}/archive`);
+}

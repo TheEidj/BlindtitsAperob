@@ -9,4 +9,5 @@ export interface Playlist {
     is_followed: boolean;
     played: boolean;
     is_collaborative: boolean;
+    creator_name?: string;
 }
